@@ -1,12 +1,13 @@
 # NOW — пульс {{PROJECT_NAME}} (робоча назва бренду в коді — «Збір», `src/lib/brand.ts`)
 
 <!-- AUTO:BEGIN — генерується scripts/now_update.mjs з git, руками не правити (скрипта ще нема) -->
-гілка: claude/prototype · останній PR: #2 (прототип) · не в main: —
+гілка: main · останній PR: #3 (макети) · деплой: run #5 ✅ · не в main: —
 <!-- AUTO:END -->
 
 ## 🎯 ЗАРАЗ
-Перший прототип маркетплейсу (Next.js 16 + PWA, статичний експорт, тестові дані, без бази) — на GitHub Pages:
-https://volodymyr221.github.io/LikarskyTravy-Market/ . Чекаємо відгуку Вови й друга.
+Перший прототип маркетплейсу (Next.js 16 + PWA, статичний експорт, тестові дані, без бази) — ОПУБЛІКОВАНО
+(04.10.2026, деплой #5): https://volodymyr221.github.io/LikarskyTravy-Market/ . Чекаємо відгуку Вови й друга.
+Pages увімкнено Вовою (Source: GitHub Actions). З хмари Claude github.io закритий — живий сайт перевіряє Вова.
 
 ## ✅ ЗРОБЛЕНО В ОСТАННІЙ СЕСІЇ (04.10.2026)
 - PR #1: робоче середовище з VOVA_CLAUDE_KIT (без хуків).
