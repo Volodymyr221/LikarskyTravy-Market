@@ -14,7 +14,7 @@ Claude сам збирає застосунок локально, запуска
 2. Якщо Playwright шукає браузер в іншому місці — симлінк у scratchpad (тимчасову теку сесії) або явний `executablePath`.
 
 ## Прогін
-1. Зібрати і підняти **локально** (НЕ прод): `npm run build` ; `{{SERVE_CMD}}` у фоні → `{{SERVE_URL}}`.
+1. Зібрати і підняти **локально** (НЕ прод): `npm run build` ; `python3 -m http.server 4173 -d out` у фоні → `http://127.0.0.1:4173/`.
 2. Прочитати **реальний** код навігації / роутера — список сторінок і як між ними перейти. Не хардкодити з памʼяті.
 3. **Разовий** скрипт у scratchpad (НЕ в репо):
 ```js
@@ -26,7 +26,7 @@ const { chromium } = require('playwright');
   p.on('pageerror', e => errs.push('pageerror: ' + e.message));
   p.on('console', m => m.type() === 'error' && errs.push('console: ' + m.text()));
   for (const path of ['/', /* сторінки з роутера */]) {
-    await p.goto('{{SERVE_URL}}'.replace(/\/$/, '') + path, { waitUntil: 'networkidle' });
+    await p.goto('http://127.0.0.1:4173/'.replace(/\/$/, '') + path, { waitUntil: 'networkidle' });
     await p.screenshot({ path: `shot${path.replace(/\W/g, '_') || '_home'}.png`, fullPage: true });
   }
   console.log(errs.length ? errs.join('\n') : 'CLEAN');

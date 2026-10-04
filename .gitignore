@@ -13,3 +13,5 @@ out/
 .DS_Store
 *.log
 .env*
+next-env.d.ts
+*.tsbuildinfo

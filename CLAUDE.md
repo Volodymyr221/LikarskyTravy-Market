@@ -18,6 +18,19 @@
 - **Деплой:** GitHub Actions → GitHub Pages (автоматично при мерджі в `main`)
 - **URL:** https://volodymyr221.github.io/LikarskyTravy-Market/
 
+## Карта коду
+| шлях | що |
+|---|---|
+| `src/app/` | сторінки (App Router): `/`, `catalog`, `requests`, `auctions`, `learn`, `shop`, `sell`, `login`, `cabinet` |
+| `src/components/` | `Chrome` (шапка, нижня панель, тема, SW), `Cards`, `HerbArt` (SVG-ілюстрації), `ui`, форми |
+| `src/data/` | тестові дані: `herbs` (довідник сировини), `market` (оголошення/заявки/аукціони), `content` (гайди, магазин) |
+| `src/lib/brand.ts` | **назва бренду — тут** + `basePath` для GitHub Pages |
+| `src/app/globals.css` | дизайн-токени світлої/темної теми |
+| `public/sw.js` | service worker, `CACHE_NAME` піднімає CI |
+| `.github/workflows/deploy.yml` | збірка → GitHub Pages |
+
+Next.js 16: перед кодом читай `node_modules/next/dist/docs/` (API змінились, `params` — Promise).
+
 ## Гілки
 - Робоча: `claude/<тема>` — уся розробка.
 - `main` — тільки готове; мердж через `/finish` (PR → squash → автодеплой).

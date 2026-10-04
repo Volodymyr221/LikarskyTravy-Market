@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Дизайн-токени. Колір — тільки через токени, не hex у компонентах. */
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #efede7;
+  --text: #1d1d1f;
+  --muted: #66666b;
+  --line: rgba(20, 20, 10, 0.09);
+  --accent: #2b7448;
+  --accent-strong: #1f5a37;
+  --accent-soft: #e2efe6;
+  --on-accent: #ffffff;
+  --amber: #9a5a06;
+  --amber-soft: #fbecd6;
+  --danger: #b4351f;
+  --glass: rgba(246, 245, 241, 0.72);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 30px -12px rgba(30, 40, 20, 0.16);
+  --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.05), 0 30px 60px -20px rgba(30, 40, 20, 0.28);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0b0c0b;
+  --surface: #151716;
+  --surface-2: #1e211f;
+  --text: #f2f2ef;
+  --muted: #a2a3a0;
+  --line: rgba(255, 255, 255, 0.09);
+  --accent: #62c98c;
+  --accent-strong: #84d8a6;
+  --accent-soft: rgba(98, 201, 140, 0.14);
+  --on-accent: #062312;
+  --amber: #f2ac4b;
+  --amber-soft: rgba(242, 172, 75, 0.14);
+  --danger: #ff8a73;
+  --glass: rgba(11, 12, 11, 0.7);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 30px -12px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.4), 0 30px 60px -20px rgba(0, 0, 0, 0.8);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--text);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-amber: var(--amber);
+  --color-amber-soft: var(--amber-soft);
+  --color-danger: var(--danger);
+  --color-glass: var(--glass);
+  --shadow-card: var(--shadow);
+  --shadow-float: var(--shadow-lg);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable", "Segoe UI", Inter, Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Ботанічна ілюстрація: фон і колір штриха від відтінку --h */
+.herb-art {
+  background:
+    radial-gradient(120% 90% at 85% 10%, hsl(var(--h) 60% 96%) 0%, transparent 60%),
+    linear-gradient(160deg, hsl(var(--h) 42% 91%), hsl(var(--h) 36% 82%));
+  color: hsl(var(--h) 38% 30%);
+}
+[data-theme="dark"] .herb-art {
+  background:
+    radial-gradient(120% 90% at 85% 10%, hsl(var(--h) 30% 26%) 0%, transparent 60%),
+    linear-gradient(160deg, hsl(var(--h) 22% 17%), hsl(var(--h) 20% 11%));
+  color: hsl(var(--h) 45% 72%);
+}
+
+/* Натискання — легке стискання, як на iOS */
+.pressable {
+  transition: transform 0.18s var(--ease-out-soft), box-shadow 0.25s ease, background-color 0.2s ease;
+}
+.pressable:active {
+  transform: scale(0.97);
+}
+@media (hover: hover) and (pointer: fine) {
+  .lift:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+.lift {
+  transition: transform 0.35s var(--ease-out-soft), box-shadow 0.35s var(--ease-out-soft);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Поява секцій */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rise {
+  animation: rise 0.7s var(--ease-out-soft) both;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.live-dot {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
