@@ -1,0 +1,15 @@
+# deps / build
+node_modules/
+.next/
+out/
+
+# Claude runtime flags
+.claude/.byyou-*
+.claude/.token-halt
+.claude/.byyou-release
+.claude/hooks/.byyou-handoff-warned
+
+# misc
+.DS_Store
+*.log
+.env*
