@@ -1,33 +1,14 @@
-// Картки маркетплейсу: оголошення продавця, заявка закупівельника, лот аукціону.
+// Картки: заявка закупівельника (з прогресом збору) і лот аукціону. Картки стрічки — у AdCards.
 import Link from "next/link";
 import { HerbArt } from "./HerbArt";
 import { Icon } from "./Icon";
 import { Countdown } from "./Countdown";
 import { Verified } from "./ui";
 import { herbById } from "@/data/herbs";
-import type { Auction, BuyRequest, Listing } from "@/data/market";
+import type { Auction, BuyRequest } from "@/data/market";
 import { potential, uah, weight } from "@/lib/format";
 
 const card = "lift pressable group block overflow-hidden rounded-[22px] bg-surface shadow-card";
-
-export function ListingCard({ l }: { l: Listing }) {
-  return (
-    <Link href={`/catalog/${l.id}/`} className={card}>
-      <HerbArt herbId={l.herbId} className="aspect-[4/3]" />
-      <div className="p-3.5 md:p-4">
-        <div className="flex items-baseline justify-between gap-2">
-          <div className="text-[18px] font-semibold tracking-tight md:text-[20px]">{uah(l.pricePerKg)}<span className="text-[14px] font-normal text-muted">/кг</span></div>
-          <div className="rounded-full bg-surface-2 px-2.5 py-0.5 text-[13px] font-semibold">{weight(l.volumeKg)}</div>
-        </div>
-        <div className="mt-1 line-clamp-2 text-[15px] leading-snug">{l.title}</div>
-        <div className="mt-3 text-[13px] text-muted">
-          <div className="flex items-center gap-1"><Icon name="pin" size={14} className="shrink-0" /><span className="truncate">{l.village}, {l.region}</span></div>
-          <div className="mt-0.5 pl-[18px]">{l.postedAgo}</div>
-        </div>
-      </div>
-    </Link>
-  );
-}
 
 export function RequestCard({ r }: { r: BuyRequest }) {
   const herb = herbById(r.herbId);
@@ -45,7 +26,7 @@ export function RequestCard({ r }: { r: BuyRequest }) {
           </div>
         </div>
         <div className="text-right">
-          <div className="text-[20px] font-semibold tracking-tight text-accent">{r.pricePerKg} ₴</div>
+          <div className="text-[20px] font-semibold tracking-tight text-accent">{r.pricePerKg} грн</div>
           <div className="text-[12px] text-muted">за кг</div>
         </div>
       </div>

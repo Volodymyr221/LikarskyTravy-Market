@@ -85,7 +85,7 @@ export default function CabinetPage() {
             {requests.filter((r) => r.regions.includes("Волинська") || r.regions.includes("вся Україна")).slice(0, 3).map((r) => (
               <Link key={r.id} href={`/requests/${r.id}/`} className="pressable flex items-center justify-between rounded-2xl bg-surface px-4 py-3 shadow-card">
                 <span className="font-medium">{herbById(r.herbId).name} · {r.volumeT} т</span>
-                <span className="font-semibold text-accent">{r.pricePerKg} ₴/кг</span>
+                <span className="font-semibold text-accent">{r.pricePerKg} грн/кг</span>
               </Link>
             ))}
           </div>

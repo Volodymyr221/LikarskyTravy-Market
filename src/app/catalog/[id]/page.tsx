@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HerbArt } from "@/components/HerbArt";
-import { ListingCard } from "@/components/Cards";
+import { SellCard } from "@/components/AdCards";
 import { ContactBox } from "@/components/ContactBox";
 import { BackLink, Fact, SellerLine } from "@/components/ui";
 import { herbById } from "@/data/herbs";
@@ -15,7 +15,7 @@ type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const l = findListing((await params).id);
-  return { title: l ? `${l.title} — ${l.pricePerKg} ₴/кг` : "Оголошення" };
+  return { title: l ? `${l.title} — ${l.pricePerKg} грн/кг` : "Оголошення" };
 }
 
 export default async function ListingPage({ params }: Props) {
@@ -80,7 +80,7 @@ export default async function ListingPage({ params }: Props) {
       {more.length > 0 && (
         <section className="mt-16">
           <h2 className="mb-5 text-[24px] font-semibold tracking-tight">Схожі партії</h2>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">{more.map((x) => <ListingCard key={x.id} l={x} />)}</div>
+          <div className="grid gap-3 sm:grid-cols-2 md:gap-4 lg:grid-cols-4">{more.map((x) => <SellCard key={x.id} l={x} />)}</div>
         </section>
       )}
     </div>

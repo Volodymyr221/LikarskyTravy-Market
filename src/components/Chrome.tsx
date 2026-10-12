@@ -7,7 +7,7 @@ import { Icon, Logo } from "./Icon";
 import { brand, basePath } from "@/lib/brand";
 
 const nav = [
-  { href: "/catalog/", label: "Каталог" },
+  { href: "/catalog/", label: "Каталог рослин" },
   { href: "/requests/", label: "Заявки" },
   { href: "/auctions/", label: "Аукціони" },
   { href: "/learn/", label: "Навчання" },
@@ -43,7 +43,7 @@ export function Header() {
           <Logo />
           <span className="text-[19px] font-semibold tracking-tight">{brand.name}</span>
         </Link>
-        <nav className="hidden flex-1 items-center gap-1 md:flex">
+        <nav className="hidden flex-1 items-center gap-0.5 lg:flex">
           {nav.map((n) => (
             <Link key={n.href} href={n.href}
               className={`rounded-full px-3.5 py-2 text-[14px] font-medium transition-colors ${isActive(path, n.href) ? "bg-surface-2 text-ink" : "text-muted hover:text-ink"}`}>
@@ -53,11 +53,11 @@ export function Header() {
         </nav>
         <div className="ml-auto flex items-center gap-1">
           <ThemeToggle />
-          <Link href="/login/" aria-label="Увійти" className="pressable grid h-10 w-10 place-items-center rounded-full hover:bg-surface-2">
-            <Icon name="user" size={20} />
+          <Link href="/login/" aria-label="Увійти" className="pressable flex h-10 items-center gap-1.5 rounded-full px-2.5 text-[14px] font-semibold hover:bg-surface-2">
+            <Icon name="user" size={20} /> <span className="hidden md:inline">Увійти</span>
           </Link>
           <Link href="/sell/" className="pressable ml-1 hidden items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-[14px] font-semibold text-on-accent md:flex">
-            <Icon name="plus" size={16} strokeWidth={2.4} /> Продати
+            <Icon name="plus" size={16} strokeWidth={2.4} /> Подати оголошення
           </Link>
         </div>
       </div>
@@ -68,9 +68,9 @@ export function Header() {
 const tabs = [
   { href: "/", label: "Головна", icon: "home" },
   { href: "/catalog/", label: "Каталог", icon: "grid" },
-  { href: "/sell/", label: "Продати", icon: "plus", primary: true },
-  { href: "/requests/", label: "Заявки", icon: "clipboard" },
+  { href: "/sell/", label: "Подати", icon: "plus", primary: true },
   { href: "/auctions/", label: "Аукціони", icon: "gavel" },
+  { href: "/login/", label: "Профіль", icon: "user" },
 ];
 
 export function TabBar() {

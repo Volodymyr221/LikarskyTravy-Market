@@ -1,14 +1,14 @@
 const nf = new Intl.NumberFormat("uk-UA");
 
 export const num = (n: number) => nf.format(n);
-export const uah = (n: number) => `${nf.format(n)} ₴`;
+export const uah = (n: number) => `${nf.format(n)} грн`;
 
-/** Коротко для великих сум: 1 012 000 → «1 млн ₴», 237 600 → «238 тис. ₴» */
+/** Коротко для великих сум: 1 012 000 → «1 млн грн», 237 600 → «238 тис. грн» */
 export const uahShort = (n: number) =>
-  n >= 1_000_000 ? `${new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 1 }).format(n / 1_000_000)} млн ₴`
-  : n >= 10_000 ? `${nf.format(Math.round(n / 1000))} тис. ₴` : uah(n);
+  n >= 1_000_000 ? `${new Intl.NumberFormat("uk-UA", { maximumFractionDigits: 1 }).format(n / 1_000_000)} млн грн`
+  : n >= 10_000 ? `${nf.format(Math.round(n / 1000))} тис. грн` : uah(n);
 
-export const priceRange = ([a, b]: [number, number]) => `${a}–${b} ₴/кг`;
+export const priceRange = ([a, b]: [number, number]) => `${a}–${b} грн/кг`;
 
 /** 1500 → «1,5 т», 340 → «340 кг» */
 export const weight = (kg: number) =>
