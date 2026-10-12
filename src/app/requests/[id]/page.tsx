@@ -37,7 +37,7 @@ export default async function RequestPage({ params }: Props) {
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl bg-accent-soft p-4 text-accent">
               <div className="text-[13px]">Ціна</div>
-              <div className="text-[26px] font-semibold tracking-tight">{r.pricePerKg} ₴/кг</div>
+              <div className="text-[26px] font-semibold tracking-tight">{r.pricePerKg} грн/кг</div>
             </div>
             <div className="rounded-2xl bg-surface-2 p-4">
               <div className="text-[13px] text-muted">Ще потрібно</div>

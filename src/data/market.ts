@@ -22,6 +22,7 @@ export type Listing = {
   moisture: number;
   drying: string;
   packaging: string;
+  condition?: "сушена" | "свіжа";
   certificate?: string;
   description: string;
   postedAgo: string;
@@ -143,6 +144,23 @@ export const listings: Listing[] = [
   },
 ];
 
+listings.push(
+  {
+    id: "l-111", herbId: "milk-thistle", title: "Насіння розторопші, очищене",
+    volumeKg: 800, pricePerKg: 58, minOrderKg: 50, region: "Полтавська", village: "Лубни",
+    harvest: "вересень 2026", moisture: 10, drying: "сонце, тік", packaging: "мішки по 40 кг",
+    description: "Насіння урожаю цього року, очищене від пуху й домішок.",
+    postedAgo: "3 год тому", seller: s("ФГ «Сула»", 4.8, 41, "2024", true, true),
+  },
+  {
+    id: "l-112", herbId: "yarrow", title: "Деревій, трава з квітками",
+    volumeKg: 300, pricePerKg: 38, minOrderKg: 20, region: "Житомирська", village: "Олевськ",
+    harvest: "липень 2026", moisture: 12, drying: "тінь, навіс", packaging: "мішки по 15 кг",
+    description: "Верхівки з квітками, без грубих стебел.",
+    postedAgo: "6 днів тому", seller: s("Ніна В.", 4.7, 9, "2025"),
+  },
+);
+
 export const requests: BuyRequest[] = [
   {
     id: "r-201", herbId: "air-root", volumeT: 5, collectedT: 2.3, pricePerKg: 88, deadline: "30 листопада",
@@ -187,6 +205,14 @@ export const requests: BuyRequest[] = [
     buyer: s("ФітоСировина Захід", 4.9, 214, "2024", true, true),
   },
 ];
+
+requests.push({
+  id: "r-207", herbId: "milk-thistle", volumeT: 4, collectedT: 1.2, pricePerKg: 62, deadline: "31 грудня",
+  regions: ["Полтавська", "Черкаська", "Київська"],
+  requirements: ["очищене насіння", "вологість до 11%"],
+  pickup: "самовивіз від 500 кг", postedAgo: "сьогодні",
+  buyer: s("Агрофарм-Трейд", 4.7, 301, "2024", true, true),
+});
 
 export const auctions: Auction[] = [
   {

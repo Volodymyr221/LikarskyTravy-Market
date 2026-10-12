@@ -81,7 +81,7 @@ export function SellForm() {
             <input type="number" inputMode="numeric" min={1} value={volume} onChange={(e) => setVolume(+e.target.value)} className={field} />
           </label>
           <label>
-            <div className="mb-2 text-[14px] font-medium">{mode === "auction" ? "Стартова ціна, ₴/кг" : "Ціна, ₴/кг"}</div>
+            <div className="mb-2 text-[14px] font-medium">{mode === "auction" ? "Стартова ціна, грн/кг" : "Ціна, грн/кг"}</div>
             <input type="number" inputMode="numeric" min={1} value={price} onChange={(e) => setPrice(+e.target.value)} className={field} />
           </label>
         </div>

@@ -1,214 +1,139 @@
 import Link from "next/link";
 import { HerbArt } from "@/components/HerbArt";
 import { Icon } from "@/components/Icon";
-import { AuctionCard, ListingCard, RequestCard } from "@/components/Cards";
-import { Season } from "@/components/Season";
-import { SectionHead } from "@/components/ui";
-import { auctions, listings, requests } from "@/data/market";
-import { guides, shop } from "@/data/content";
-import { herbById } from "@/data/herbs";
-import { num, potential, uah, uahShort } from "@/lib/format";
+import { Market } from "@/components/Market";
+import { categories, herbById } from "@/data/herbs";
+import { auctions, listings, regions, requests } from "@/data/market";
+import { guides } from "@/data/content";
 import { asset } from "@/lib/brand";
 
-const tiles = [
-  { href: "/catalog/", icon: "grid", title: "Каталог", text: "Партії сировини від збирачів" },
-  { href: "/requests/", icon: "clipboard", title: "Заявки", text: "Що шукають закупівельники" },
-  { href: "/auctions/", icon: "gavel", title: "Аукціони", text: "Ціну визначає попит" },
-  { href: "/learn/", icon: "book", title: "Навчання", text: "Як збирати й сушити" },
-  { href: "/shop/", icon: "bag", title: "Магазин", text: "Чаї та послуги родини" },
+const countIn = (cat: string) =>
+  listings.filter((l) => herbById(l.herbId).category === cat).length + requests.filter((r) => herbById(r.herbId).category === cat).length;
+
+const trust = [
+  { icon: "leaf", t: "Тільки натуральна лікарська сировина" },
+  { icon: "shield", t: "Перевірені продавці й компанії" },
+  { icon: "phone", t: "Прямий контакт, без посередників" },
+  { icon: "truck", t: "Самовивіз або доставка поштою" },
 ];
 
-export default function Home() {
-  const wantedT = requests.reduce((s, r) => s + (r.volumeT - r.collectedT), 0);
-  const wantedUah = requests.reduce((s, r) => s + potential(r.volumeT - r.collectedT, r.pricePerKg), 0);
-  const top = requests[0];
-  const hot = auctions[0];
+const sel = "w-full appearance-none rounded-xl bg-surface-2 py-3 pl-10 pr-9 text-[15px] text-ink outline-none md:rounded-none md:bg-transparent md:py-3.5";
 
+export default function Home() {
   return (
     <>
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_80%_0%,var(--accent-soft),transparent_70%)]" />
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-12 pt-10 md:grid-cols-[1.1fr_1fr] md:pb-20 md:pt-20">
-          <div className="rise">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-[13px] font-medium shadow-card">
-              <span className="h-2 w-2 rounded-full bg-accent" /> Маркетплейс лікарських рослин України
-            </div>
-            <h1 className="text-[44px] font-semibold leading-[1.02] tracking-[-0.035em] md:text-[72px]">
-              Збирайте.<br />Сушіть.<br /><span className="text-accent">Продавайте.</span>
-            </h1>
-            <p className="mt-5 max-w-lg text-[17px] leading-relaxed text-muted md:text-[20px]">
-              Корінь аїру, кропива, липовий цвіт — закупівельники вже шукають сировину з вашого села. Вам лишається заготовити.
-            </p>
-            <form action={asset("/catalog/")} className="mt-7 flex max-w-lg items-center gap-2 rounded-full border border-line bg-surface p-1.5 pl-5 shadow-card">
-              <Icon name="search" size={19} className="text-muted" />
-              <input name="q" placeholder="Що шукаєте? Наприклад, корінь аїру" aria-label="Пошук сировини"
-                className="min-w-0 flex-1 bg-transparent py-2 text-[16px] outline-none placeholder:text-muted" />
-              <button className="pressable rounded-full bg-ink px-5 py-2.5 text-[15px] font-semibold text-bg">Знайти</button>
-            </form>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Link href="/sell/" className="pressable inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-[16px] font-semibold text-on-accent shadow-card">
-                <Icon name="plus" size={18} strokeWidth={2.4} /> Продати сировину
-              </Link>
-              <Link href="/sell/?mode=request" className="pressable inline-flex items-center gap-2 rounded-full bg-surface px-6 py-3.5 text-[16px] font-semibold shadow-card">
-                Я закупівельник <Icon name="arrow" size={17} />
-              </Link>
-            </div>
+      {/* Банер з пошуком */}
+      <section className="relative overflow-hidden bg-[linear-gradient(135deg,#173d28_0%,#2b7448_60%,#3d8a55_100%)] text-white">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(50%_70%_at_85%_20%,rgba(255,255,255,0.18),transparent_70%)]" />
+        <div className="pointer-events-none absolute -right-10 top-6 hidden w-[520px] md:block">
+          <div className="absolute right-[260px] top-6 w-40 -rotate-6 overflow-hidden rounded-[26px] shadow-float"><HerbArt herbId="chamomile" className="aspect-[3/4]" /></div>
+          <div className="absolute right-[100px] top-0 w-44 rotate-3 overflow-hidden rounded-[26px] shadow-float"><HerbArt herbId="linden" className="aspect-[3/4]" /></div>
+          <div className="absolute right-[180px] top-[118px] w-44 overflow-hidden rounded-[26px] shadow-float"><HerbArt herbId="air-root" className="aspect-[4/3]" /></div>
+        </div>
+        <div className="relative mx-auto max-w-6xl px-4 pb-24 pt-10 md:pb-28 md:pt-16">
+          <h1 className="max-w-xl text-[32px] font-bold leading-[1.08] tracking-tight md:text-[48px]">
+            Маркетплейс лікарських рослин України
+          </h1>
+          <p className="mt-3 max-w-lg text-[17px] leading-snug text-white/85 md:text-[19px]">
+            Продавайте зібрану сировину. Знаходьте покупців. Замовляйте потрібні рослини.
+          </p>
+        </div>
+      </section>
+
+      <div className="relative z-10 mx-auto -mt-16 max-w-6xl px-4 md:-mt-20">
+        <form action={asset("/catalog/")} className="grid gap-2 rounded-[22px] bg-surface p-2 shadow-float md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-center md:gap-0 md:divide-x md:divide-line">
+          <label className="relative block">
+            <span className="sr-only">Назва рослини</span>
+            <Icon name="search" size={19} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
+            <input name="q" placeholder="Пошук за назвою рослини…" className="w-full rounded-xl bg-surface-2 py-3 pl-11 pr-3 text-[16px] outline-none placeholder:text-muted md:rounded-none md:bg-transparent md:py-3.5" />
+          </label>
+          <div className="grid grid-cols-2 gap-2 md:contents">
+            <label className="relative block">
+              <span className="sr-only">Область</span>
+              <Icon name="pin" size={17} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
+              <select name="region" className={sel} defaultValue="">
+                <option value="">Усі області</option>
+                {regions.map((r) => <option key={r} value={r}>{r}</option>)}
+              </select>
+              <Icon name="chevron" size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted" />
+            </label>
+            <label className="relative block">
+              <span className="sr-only">Категорія</span>
+              <Icon name="grid" size={17} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
+              <select name="cat" className={sel} defaultValue="">
+                <option value="">Усі категорії</option>
+                {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+              <Icon name="chevron" size={16} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted" />
+            </label>
           </div>
-
-          {/* Композиція карток */}
-          <div className="rise relative mx-auto h-[360px] w-full max-w-[460px] md:h-[480px]" style={{ animationDelay: "120ms" }}>
-            <div className="absolute left-0 top-6 w-[58%] -rotate-6 overflow-hidden rounded-[28px] shadow-float">
-              <HerbArt herbId="linden" className="aspect-[3/4]" />
-            </div>
-            <div className="absolute right-0 top-0 w-[56%] rotate-[5deg] overflow-hidden rounded-[28px] shadow-float">
-              <HerbArt herbId="nettle-leaf" className="aspect-[3/4]" />
-            </div>
-            <div className="absolute bottom-0 left-[18%] w-[64%] overflow-hidden rounded-[28px] shadow-float">
-              <HerbArt herbId="air-root" className="aspect-[4/3]" />
-            </div>
-            <div className="absolute -left-2 bottom-24 rounded-2xl bg-surface/90 px-4 py-3 shadow-float backdrop-blur-xl md:-left-6">
-              <div className="text-[12px] text-muted">Куплю · {top.buyer.name}</div>
-              <div className="text-[15px] font-semibold">{herbById(top.herbId).name} {top.volumeT} т · <span className="text-accent">{top.pricePerKg} ₴/кг</span></div>
-            </div>
-            <div className="absolute -right-1 bottom-40 rounded-2xl bg-surface/90 px-4 py-3 shadow-float backdrop-blur-xl md:-right-4">
-              <div className="flex items-center gap-1.5 text-[12px] text-muted"><span className="live-dot h-2 w-2 rounded-full bg-[#ff5a3c]" /> Аукціон</div>
-              <div className="text-[15px] font-semibold">Нова ставка {uah(hot.currentBid)}</div>
-            </div>
+          <div className="md:pl-2">
+            <button className="pressable flex w-full items-center justify-center gap-2 rounded-xl bg-accent px-7 py-3.5 text-[16px] font-semibold text-on-accent md:rounded-2xl">
+              <Icon name="search" size={18} /> Знайти
+            </button>
           </div>
-        </div>
+        </form>
+      </div>
 
-        {/* Цифри (рахуються з тестових даних) */}
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid grid-cols-3 divide-x divide-line rounded-[22px] bg-surface py-5 shadow-card">
-            {[
-              [`${num(Math.round(wantedT * 10) / 10)} т`, "шукають закупівельники"],
-              [uahShort(wantedUah), "готові заплатити за сировину"],
-              [String(auctions.length), "аукціони наживо"],
-            ].map(([v, l]) => (
-              <div key={l} className="px-3 text-center md:px-6">
-                <div className="text-[19px] font-semibold tracking-tight md:text-[30px]">{v}</div>
-                <div className="mt-0.5 text-[12px] leading-tight text-muted md:text-[14px]">{l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Розділи */}
-      <section className="mx-auto mt-14 max-w-6xl px-4">
-        <div className="no-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-5 md:px-0">
-          {tiles.map((t) => (
-            <Link key={t.href} href={t.href} className="lift pressable w-[150px] shrink-0 rounded-[22px] bg-surface p-4 shadow-card md:w-auto">
-              <span className="grid h-11 w-11 place-items-center rounded-2xl bg-accent-soft text-accent"><Icon name={t.icon} size={22} /></span>
-              <div className="mt-4 font-semibold">{t.title}</div>
-              <div className="mt-0.5 text-[13px] leading-snug text-muted">{t.text}</div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Заявки */}
-      <section className="mx-auto mt-16 max-w-6xl px-4">
-        <SectionHead eyebrow="Шукають зараз" title="Збирайте під замовлення" href="/requests/" cta="Усі заявки" />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {requests.slice(0, 3).map((r) => <RequestCard key={r.id} r={r} />)}
-        </div>
-      </section>
-
-      {/* Аукціони */}
-      <section className="mx-auto mt-16 max-w-6xl px-4">
-        <SectionHead eyebrow="Наживо" title="Аукціони" href="/auctions/" />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {auctions.map((a) => <AuctionCard key={a.id} a={a} />)}
-        </div>
-      </section>
-
-      <section className="mx-auto mt-16 max-w-6xl px-4"><Season /></section>
-
-      {/* Свіжі оголошення */}
-      <section className="mx-auto mt-16 max-w-6xl px-4">
-        <SectionHead eyebrow="Каталог" title="Свіжі партії" href="/catalog/" />
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
-          {listings.slice(0, 8).map((l) => <ListingCard key={l.id} l={l} />)}
-        </div>
-      </section>
-
-      {/* Як це працює */}
-      <section className="mx-auto mt-20 max-w-6xl px-4">
-        <SectionHead eyebrow="Просто" title="Як це працює" />
-        <div className="grid gap-4 md:grid-cols-2">
-          {[
-            { who: "Для збирачів", icon: "leaf", steps: ["Подивіться заявки й календар — що зараз купують", "Зберіть і висушіть за нашими гайдами", "Викладіть партію або виставте на аукціон", "Отримайте оплату після зважування"] },
-            { who: "Для закупівельників", icon: "truck", steps: ["Розмістіть заявку: що, скільки, за якою ціною", "Збирачі в регіонах бачать її одразу", "Обирайте партії з фото, вологістю й рейтингом", "Забирайте самовивозом або поштою"] },
-          ].map((c) => (
-            <div key={c.who} className="rounded-[26px] bg-surface p-6 shadow-card md:p-8">
-              <div className="flex items-center gap-3">
-                <span className="grid h-11 w-11 place-items-center rounded-2xl bg-accent-soft text-accent"><Icon name={c.icon} size={22} /></span>
-                <h3 className="text-[22px] font-semibold tracking-tight">{c.who}</h3>
-              </div>
-              <ol className="mt-6 space-y-4">
-                {c.steps.map((s, i) => (
-                  <li key={s} className="flex gap-4">
-                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ink text-[13px] font-semibold text-bg">{i + 1}</span>
-                    <span className="pt-0.5 text-[16px] leading-snug">{s}</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Навчання */}
-      <section className="mx-auto mt-20 max-w-6xl px-4">
-        <SectionHead eyebrow="Навчання" title="Збирайте правильно — продавайте дорожче" href="/learn/" cta="Усі гайди" />
-        <div className="grid gap-4 md:grid-cols-3">
-          {guides.slice(0, 3).map((g) => (
-            <Link key={g.slug} href={`/learn/${g.slug}/`} className="lift pressable overflow-hidden rounded-[22px] bg-surface shadow-card">
-              <HerbArt herbId={g.herbId} label={false} className="aspect-[16/9]" />
-              <div className="p-5">
-                <div className="text-[13px] text-muted">{g.minutes} хв · {g.level}</div>
-                <div className="mt-1 text-[18px] font-semibold leading-snug tracking-tight">{g.title}</div>
-                <p className="mt-2 line-clamp-2 text-[14px] text-muted">{g.summary}</p>
+      {/* Категорії */}
+      <section className="mx-auto mt-8 max-w-6xl px-4">
+        <div className="grid grid-cols-3 gap-2.5 md:grid-cols-6 md:gap-4">
+          {categories.map((c) => (
+            <Link key={c.id} href={`/catalog/?cat=${c.id}`} className="lift pressable overflow-hidden rounded-[20px] bg-surface text-center shadow-card">
+              <HerbArt herbId={c.icon} className="aspect-[4/3]" />
+              <div className="px-2 py-2.5">
+                <div className="text-[15px] font-semibold">{c.name}</div>
+                <div className="text-[12px] text-muted">{countIn(c.id)} оголош.</div>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Магазин родини */}
-      <section className="mx-auto mt-20 max-w-6xl px-4">
-        <div className="grid overflow-hidden rounded-[30px] bg-ink text-bg md:grid-cols-2">
-          <div className="p-8 md:p-12">
-            <div className="text-[13px] font-semibold uppercase tracking-wider opacity-70">Від родини засновника</div>
-            <h2 className="mt-2 text-[30px] font-semibold leading-tight tracking-tight md:text-[40px]">Ми самі збираємо й сушимо трави вже багато років</h2>
-            <p className="mt-4 text-[16px] leading-relaxed opacity-75">Чаї та збори з нашої сировини, а ще послуги для збирачів: сушіння, вивезення партій, протокол вологості.</p>
-            <Link href="/shop/" className="pressable mt-7 inline-flex items-center gap-2 rounded-full bg-bg px-6 py-3.5 font-semibold text-ink">
-              До магазину <Icon name="arrow" size={17} />
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3 p-4 md:p-6">
-            {shop.slice(0, 4).map((s) => (
-              <div key={s.id} className="overflow-hidden rounded-2xl bg-white/5">
-                <HerbArt herbId={s.herbId} label={false} className="aspect-square" />
-                <div className="p-3 text-[14px]">
-                  <div className="font-semibold">{s.title}</div>
-                  <div className="opacity-70">{uah(s.price)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Оголошення */}
+      <section className="mx-auto mt-12 max-w-6xl px-4">
+        <Market limit={6} />
       </section>
 
-      {/* Заклик */}
-      <section className="mx-auto mt-20 max-w-3xl px-4 text-center">
-        <h2 className="text-[32px] font-semibold leading-tight tracking-tight md:text-[48px]">У вашому селі вже ростуть гроші.</h2>
-        <p className="mx-auto mt-4 max-w-xl text-[17px] text-muted">Викладіть першу партію за 2 хвилини — з телефона, просто з поля.</p>
-        <Link href="/sell/" className="pressable mt-7 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-[17px] font-semibold text-on-accent shadow-card">
-          <Icon name="plus" size={18} strokeWidth={2.4} /> Розмістити оголошення
+      {/* Аукціони · навчання · магазин */}
+      <section className="mx-auto mt-14 grid max-w-6xl gap-4 px-4 md:grid-cols-3">
+        <Link href="/auctions/" className="lift pressable flex items-center gap-4 rounded-[22px] bg-amber-soft p-5">
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-surface text-amber"><Icon name="gavel" size={24} /></span>
+          <div className="flex-1">
+            <div className="flex items-center gap-1.5 text-[13px] font-semibold text-amber"><span className="live-dot h-2 w-2 rounded-full bg-[#ff5a3c]" /> {auctions.length} аукціони наживо</div>
+            <div className="text-[17px] font-semibold leading-snug">Продайте дорожче на аукціоні</div>
+          </div>
+          <Icon name="arrow" size={18} className="text-muted" />
         </Link>
+        <Link href="/learn/" className="lift pressable flex items-center gap-4 rounded-[22px] bg-accent-soft p-5">
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-surface text-accent"><Icon name="book" size={24} /></span>
+          <div className="flex-1">
+            <div className="text-[13px] font-semibold text-accent">{guides.length} коротких гайдів</div>
+            <div className="text-[17px] font-semibold leading-snug">Як правильно збирати й сушити</div>
+          </div>
+          <Icon name="arrow" size={18} className="text-muted" />
+        </Link>
+        <Link href="/shop/" className="lift pressable flex items-center gap-4 rounded-[22px] bg-surface p-5 shadow-card">
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-surface-2"><Icon name="bag" size={24} /></span>
+          <div className="flex-1">
+            <div className="text-[13px] font-semibold text-muted">Від родини засновника</div>
+            <div className="text-[17px] font-semibold leading-snug">Чаї, сушіння, вивезення партій</div>
+          </div>
+          <Icon name="arrow" size={18} className="text-muted" />
+        </Link>
+      </section>
+
+      {/* Довіра */}
+      <section className="mx-auto mt-14 max-w-6xl px-4">
+        <div className="grid gap-4 rounded-[26px] bg-accent-soft p-6 sm:grid-cols-2 md:grid-cols-4 md:p-8">
+          {trust.map((x) => (
+            <div key={x.t} className="flex items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-surface text-accent"><Icon name={x.icon} size={22} /></span>
+              <span className="text-[15px] font-medium leading-snug">{x.t}</span>
+            </div>
+          ))}
+        </div>
+        <p className="mt-6 text-center text-[18px] font-semibold italic text-accent">Разом зберігаємо природні багатства України</p>
       </section>
     </>
   );

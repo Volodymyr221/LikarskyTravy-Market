@@ -174,6 +174,24 @@ function Scene({ kind, r }: { kind: ArtKind; r: () => number }) {
           ))}
         </g>
       );
+    case "seed":
+      return (
+        <g>
+          <path d="M80,250 Q200,170 320,250 Z" fill="currentColor" fillOpacity={0.12} />
+          {Array.from({ length: 70 }, (_, i) => {
+            const t = r(), a = r() * Math.PI;
+            const x = 200 + Math.cos(a) * 120 * t * (r() > 0.5 ? 1 : -1), y = 245 - Math.sin(a) * 60 * t - r() * 10;
+            return <ellipse key={i} cx={x} cy={y} rx={7} ry={4} transform={`rotate(${r() * 180} ${x} ${y})`} fill="#7a4b22" fillOpacity={0.55 + r() * 0.4} stroke="currentColor" strokeWidth={0.6} />;
+          })}
+          <path d="M200,175 C196,140 204,110 200,80" stroke="currentColor" strokeWidth={2.4} fill="none" />
+          <g transform="translate(200 70)">
+            {Array.from({ length: 18 }, (_, i) => (
+              <path key={i} d="M0,0 L0,-34" transform={`rotate(${-80 + i * 9.4})`} stroke="#9b5fb5" strokeWidth={2.2} strokeLinecap="round" />
+            ))}
+            <ellipse cx={0} cy={10} rx={20} ry={16} fill="currentColor" fillOpacity={0.35} stroke="currentColor" strokeWidth={1.4} />
+          </g>
+        </g>
+      );
     case "umbel":
       return (
         <g>
@@ -197,7 +215,7 @@ function Scene({ kind, r }: { kind: ArtKind; r: () => number }) {
   }
 }
 
-export function HerbArt({ herbId, className = "", label = true }: { herbId: string; className?: string; label?: boolean }) {
+export function HerbArt({ herbId, className = "", label = false }: { herbId: string; className?: string; label?: boolean }) {
   const herb = herbById(herbId);
   const r = rng(herb.id);
   return (

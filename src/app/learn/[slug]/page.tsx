@@ -60,7 +60,7 @@ export default async function GuidePage({ params }: Props) {
         <Link href={`/requests/${demand.id}/`} className="lift pressable mt-10 flex items-center gap-4 rounded-[22px] bg-ink p-5 text-bg">
           <div className="flex-1">
             <div className="text-[13px] opacity-70">Уже зараз купують</div>
-            <div className="text-[18px] font-semibold">{herb.name}: {demand.volumeT} т по {demand.pricePerKg} ₴/кг</div>
+            <div className="text-[18px] font-semibold">{herb.name}: {demand.volumeT} т по {demand.pricePerKg} грн/кг</div>
           </div>
           <Icon name="arrow" size={20} />
         </Link>

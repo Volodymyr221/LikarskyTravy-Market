@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { CatalogView } from "@/components/CatalogView";
+import { Market } from "@/components/Market";
 import { PageHead } from "@/components/ui";
 
-export const metadata: Metadata = { title: "Каталог сировини", description: "Партії сушеної лікарської сировини від збирачів з усієї України." };
+export const metadata: Metadata = { title: "Каталог рослин", description: "Оголошення про продаж і купівлю лікарської сировини по всій Україні." };
 
 export default function CatalogPage() {
   return (
     <>
-      <PageHead title="Каталог сировини" sub="Партії від збирачів і фермерських господарств. Ціна за кілограм сухої сировини." />
-      <CatalogView />
+      <PageHead title="Каталог рослин" sub="Хто продає і хто купує лікарську сировину. Ціни — за кілограм." />
+      <div className="mx-auto max-w-6xl px-4"><Market title="Усі оголошення" /></div>
     </>
   );
 }
